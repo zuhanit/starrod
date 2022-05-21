@@ -1,0 +1,32 @@
+import { Meta } from "@storybook/addon-docs";
+import MenuButton from "./MenuButton";
+import Menu from "../Navigation/Menu";
+import MenuItem from "../Navigation/MenuItem";
+
+<Meta title="Buttons/MenuButton" />
+
+# MenuButton
+
+<div className="example">
+  <style jsx>{`
+    .example {
+      width: 500px;
+      height: 500px;
+    }
+  `}</style>
+  <MenuButton component={<div>Click me!</div>}>
+    <Menu>
+      <MenuItem title="👊 Punch makes me happy" />
+      <MenuItem title="😍 All work no play makes jack a dull boy" />
+    </Menu>
+  </MenuButton>
+</div>
+
+```javascript
+<MenuButton component={<div>Click me!</div>}>
+  <Menu>
+    <MenuItem title="👊 Punch makes me happy" />
+    <MenuItem title="😍 All work no play makes jack a dull boy" />
+  </Menu>
+</MenuButton>
+```
