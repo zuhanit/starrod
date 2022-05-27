@@ -1,0 +1,51 @@
+import { Meta } from "@storybook/addon-docs";
+import Typo from "../components/Typo";
+
+<Meta title="Foundations/Typography" />
+
+# Typography
+
+## Text styles
+
+<div className="palette-container">
+  <Typo
+    tag={<h1>H1</h1>}
+    title="Main heading (Inter 32px bold)"
+    description="Hello22"
+  />
+  <Typo
+    tag={<h2>H2</h2>}
+    title="Secondary heading (Inter 24px bold)"
+    description="Hello22"
+  />
+  <Typo
+    tag={<h3>H3</h3>}
+    title="Tertiary heading (Inter 24px light)"
+    description="Hello22"
+  />
+  <Typo
+    tag={<h4>H4</h4>}
+    title="Fourth heading (Inter 18px bold)"
+    description="Hello22"
+  />
+  <Typo
+    tag={<h5>H5</h5>}
+    title="Fifth heading (Inter 16px bold)"
+    description="Hello22"
+  />
+  <Typo
+    tag="text"
+    title="General text (Inter 14px normal)"
+    description="Hello22"
+  />
+  <Typo
+    tag={<p>{"<p>"}</p>}
+    title="Paragraph text (Inter 16px normal)"
+    description="Hello22"
+  />
+  <Typo
+    tag={<span style={{ color: "var(--link)" }}>link</span>}
+    title="Link text (Inter 14px normal)"
+    description="Hello22"
+  />
+</div>
