@@ -1,18 +1,28 @@
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 
-export interface TreeviewProps {
+export interface TreeviewItemProps
+  extends Omit<React.HTMLProps<HTMLDivElement>, "children"> {
   label: string;
   root?: boolean;
   children?:
-    | React.ReactElement<TreeviewProps>
-    | React.ReactElement<TreeviewProps>[];
+    | React.ReactElement<TreeviewItemProps>
+    | React.ReactElement<TreeviewItemProps>[]
+    | React.ReactElement<TreeviewItemProps>[][];
 }
 
-const TreeViewItem = ({ label, children, root }: TreeviewProps) => {
+const TreeViewItem = ({
+  label,
+  children,
+  root,
+  ...props
+}: TreeviewItemProps) => {
   const [collapsed, setCollapsed] = useState(false);
-  const onClickContainer = () => {
+  const onClickContainer = (event: MouseEvent<HTMLDivElement>) => {
     setCollapsed(!collapsed);
+    if (props.onClick) {
+      props.onClick(event);
+    }
   };
   return (
     <>
@@ -22,22 +32,16 @@ const TreeViewItem = ({ label, children, root }: TreeviewProps) => {
           gap: 4px;
           align-items: center;
           cursor: pointer;
-          padding: 4px 0;
-        }
-
-        .item-anchor {
-          content: "";
-          border-bottom: 0.01rem dashed var(--chassis);
-          width: 8px;
+          padding: 8px 0;
+          transition: 0.2s ease-in;
         }
 
         .item-label {
           padding-left: 8px;
-          transition: 0.2s ease-in;
         }
 
-        .item-label:hover {
-          color: var(--button-hover);
+        .treeview-item:hover {
+          color: var(--tertiary);
         }
 
         :global(.arrow) {
@@ -51,7 +55,7 @@ const TreeViewItem = ({ label, children, root }: TreeviewProps) => {
 
         .treeview-item-container {
           display: none;
-          margin-left: 8px;
+          padding-left: 16px;
           position: relative;
         }
 
@@ -59,8 +63,8 @@ const TreeViewItem = ({ label, children, root }: TreeviewProps) => {
           content: "";
           height: 100%;
           position: absolute;
-          bottom: 15px;
-          border-left: 0.01rem dashed var(--chassis);
+          left: 9px;
+          border-left: 0.01rem solid var(--chassis);
         }
 
         .collapsed {

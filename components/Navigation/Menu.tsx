@@ -15,7 +15,7 @@ const Menu: React.FC<MenuProps> = ({ children }) => {
           width: 100px;
           padding: 10px 0px;
           border-radius: 5px;
-          background: var(--input-background);
+          background: var(--background-darker);
           color: var(--input-color);
           margin: 0;
           list-style: none;

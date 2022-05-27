@@ -40,15 +40,19 @@ const MenuButton: React.FC<MenuButtonProps> = ({ children, component }) => {
           margin: 0;
         }
         .menu-wrapper {
-          display: none;
+          opacity: 0;
+          visibility: hidden;
           position: absolute;
           margin-top: 0.5rem;
           left: 50%;
           transform: translate(-50%);
+          transition: 0.3s ease-in-out;
+          z-index: 1;
         }
 
         .collapsed {
-          display: block;
+          opacity: 1;
+          visibility: visible;
         }
       `}</style>
       <button className="menu-button" onClick={onClickMenuButton}>
