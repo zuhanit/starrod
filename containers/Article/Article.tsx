@@ -1,16 +1,18 @@
 import Comitter from "../../components/Media/Comitter";
 import { AiFillGithub } from "react-icons/ai";
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import { MDXRemote } from "next-mdx-remote";
-
+import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import Link from "next/link";
+import { Documentation } from "../../types/IDocumentation";
+import { MDXProvider } from "@mdx-js/react";
+import { components } from "../../components/mdx-theme/starrod-mdx-theme";
 interface ArticleProps {
-  title: string;
-  lastModified: string;
-  contributors: string[];
+  docs: Documentation;
   src: MDXRemoteSerializeResult;
+  matter: { [key: string]: any };
 }
 
-const Article = ({ title, lastModified, contributors, src }: ArticleProps) => {
+const Article = ({ docs, src, matter }: ArticleProps) => {
+  const contributors = ["zuhanit"];
   return (
     <article className="article">
       <style jsx>{`
@@ -18,12 +20,13 @@ const Article = ({ title, lastModified, contributors, src }: ArticleProps) => {
           display: flex;
           flex-direction: column;
           gap: 2em;
-          max-width: 50%;
-          padding: 2rem;
+          max-width: 65%;
         }
+
         .title > h1 {
-          margin: 4px 0px;
+          margin-bottom: 8px;
         }
+
         .subtitle {
           display: flex;
           align-items: center;
@@ -31,26 +34,39 @@ const Article = ({ title, lastModified, contributors, src }: ArticleProps) => {
         }
 
         .subtitle > .modified {
-          color: var(--chassis);
+          color: var(--text-darker);
         }
 
         .contributors > .contributors-icon {
           display: flex;
+          margin-top: 14px;
           gap: 4px;
         }
         .contributors > h3 {
           margin: 4px 0px;
         }
+
+        footer {
+          background: var(--background-darker);
+          height: 50px;
+        }
       `}</style>
       <section className="title">
-        <h1>{title}</h1>
+        <h1>{matter["title"]}</h1>
         <div className="subtitle">
-          <AiFillGithub /> Edit page{" "}
-          <span className="modified">Last modified: {lastModified}</span>
+          <AiFillGithub />{" "}
+          <Link
+            href={`https://www.github.com/zuhanit/starrod/docs/${docs.path}`}
+          >
+            Edit page
+          </Link>
+          <span className="modified">Last modified: {docs.date}</span>
         </div>
       </section>
       <section className="content">
-        <MDXRemote {...src} />
+        <MDXProvider components={components}>
+          <MDXRemote {...src} />
+        </MDXProvider>
       </section>
       <section className="contributors">
         <h3>{contributors.length} Contributors</h3>

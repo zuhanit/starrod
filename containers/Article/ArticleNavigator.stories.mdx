@@ -1,0 +1,37 @@
+import { Meta } from "@storybook/addon-docs";
+import ArticleNavigator from "./ArticleNavigator";
+
+<Meta title="Containers/Article/ArticleNavigator" />
+
+# ArticleNavigator
+
+Navigator used in [Article](/story/containers-article-article--template).
+
+<div className="example">
+  <style jsx>
+    {`
+      .example {
+        display: flex;
+        flex-direction: column;
+        padding: 14px;
+        box-shadow: 0 4px 14px 0 rgb(0 0 0 / 10%);
+        gap: 1rem;
+      }
+    `}
+  </style>
+  <ArticleNavigator prev={{ label: "Previous", href: "/" }} />
+  <ArticleNavigator next={{ label: "Next", href: "/" }} />
+  <ArticleNavigator
+    prev={{ label: "Previous", href: "/" }}
+    next={{ label: "Next", href: "/" }}
+  />
+</div>
+
+```javascript
+<ArticleNavigator prev={{ label: "Previous", href: "/" }} />
+<ArticleNavigator next={{ label: "Next", href: "/" }} />
+<ArticleNavigator
+  prev={{ label: "Previous", href: "/" }}
+  next={{ label: "Next", href: "/" }}
+/>
+```
