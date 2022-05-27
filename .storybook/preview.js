@@ -1,22 +1,19 @@
 import "../styles/globals.css";
-import { StyleRegistry } from "styled-jsx";
+import "prismjs/themes/prism.css";
+import * as nextImage from "next/image";
+import CategoryContext from "../context/CategoryContext";
 
-export const decorators = [(Story) => themeDecorator(Story)];
-
-const themeDecorator = (Story) => {
-  return (
-    <StyleRegistry>
-      <Story />
-    </StyleRegistry>
-  );
-};
-
-export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
-  controls: {
-    matchers: {
-      color: /(background|color)$/i,
-      date: /Date$/,
-    },
+Object.defineProperty(nextImage, "default", {
+  configurable: true,
+  value: (props) => {
+    return <img {...props} />;
   },
-};
+});
+
+export const decorators = [
+  (Story) => {
+    <CategoryContext.Provider value={{ category: "welcome" }}>
+      <Story />
+    </CategoryContext.Provider>;
+  },
+];
