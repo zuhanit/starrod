@@ -1,43 +1,21 @@
 import TreeView from "../../components/Navigation/Treeview";
 import TreeViewItem from "../../components/Navigation/TreeviewItem";
-import yaml from "js-yaml";
-import useSWR from "swr";
-import axios from "axios";
-import {
-  DocumentationIndexAPIResponse,
-  Index,
-} from "../../pages/api/docs/index/index";
-import { ChangeEvent, useContext, useEffect } from "react";
+import { Index } from "../../pages/api/docs/index/index";
+import { ChangeEvent, useContext } from "react";
 import CategoryContext from "../../context/CategoryContext";
 import Search from "../../components/Inputs/Search";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import fuzzysort from "fuzzysort";
-import { DocumentationAPIResponse } from "../../pages/api/docs";
-import { Documentation } from "../../types/IDocumentation";
 import Link from "next/link";
-import { Category } from "../../types/Category";
-import path from "path";
-import remarkMdx from "remark-mdx";
-import { remark } from "remark";
-import remarkFrontmatter from "remark-frontmatter";
-import {
-  getHighlightedText,
-  getSearchResultInCategory,
-  SearchResult,
-} from "../../lib/SearchAPI";
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+import { getSearchResultInCategory, SearchResult } from "../../lib/SearchAPI";
+import { useDocsIndex } from "../../hooks/useDocumentation";
 
 const Sidebar = () => {
   const { category } = useContext(CategoryContext);
-  const { data, error } = useSWR<DocumentationIndexAPIResponse>(
-    "/api/docs/index",
-    fetcher
-  );
   const [searching, setSearching] = useState(false);
   const [searchDocs, setSearchdocs] = useState<SearchResult[]>([]);
   const router = useRouter();
+  const data = useDocsIndex();
 
   const traverse = (index: (string | Index)[]): React.ReactElement[] => {
     return index.flatMap((iterIndex) => {
