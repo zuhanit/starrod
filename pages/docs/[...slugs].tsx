@@ -55,7 +55,7 @@ export const getStaticProps: GetStaticProps<ContentPageProps> = async (ctx) => {
   const { slugs } = ctx.params as { slugs: string[] };
   try {
     const { data } = await axios.get<DocumentationAPIResponse>(
-      `http://localhost:3000/api/docs/${slugs.join("/")}`
+      `https://starrod.vercel.app/api/docs/${slugs.join("/")}`
     );
     if (Array.isArray(data.docs)) return { notFound: true };
     const { content, data: matterData } = matter(data.docs!.src);
