@@ -7,27 +7,36 @@ import { Documentation } from "../../../types/IDocumentation";
 import dayjs from "dayjs";
 
 export interface DocumentationAPIResponse extends APIResponse {
-  docs: Documentation | Documentation[];
+  docs?: Documentation | Documentation[];
 }
 
 /**
- * Get documentations.
+ * Response Documentations.
  *
  * @param req API Request
  * @param res Documentations
  */
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<DocumentationAPIResponse>
 ) {
-  glob("docs/**/*.mdx", {}, (err, matches) => {
-    if (err) return res.status(500);
-    const docs: Documentation[] = matches.map((match) => ({
-      name: path.basename(match, "mdx"),
-      path: match,
-      src: readFileSync(path.join(process.cwd(), match), "utf-8"),
-      date: dayjs(statSync(path.join(process.cwd(), match)).mtime).toString(),
-    }));
+  try {
+    const docs = getDocumentations();
     res.status(200).json({ docs: docs });
-  });
+  } catch (err) {
+    res.status(500);
+  }
 }
+
+/**
+ * Getting All Documentations
+ * @returns Documentations at `docs`
+ */
+export const getDocumentations = (): Documentation[] => {
+  return glob.sync("docs/**/*.mdx").map((file) => ({
+    name: path.basename(file, "mdx"),
+    path: file,
+    src: readFileSync(path.join(process.cwd(), file), "utf-8"),
+    date: dayjs(statSync(path.join(process.cwd(), file)).mtime).toString(),
+  }));
+};

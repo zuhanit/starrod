@@ -20,8 +20,9 @@ export default function docsHandler(
   res: NextApiResponse<DocumentationAPIResponse>
 ) {
   const { gid } = req.query as { gid: string[] };
-  glob(`docs/${gid.join("/")}/**/*.mdx`, (err, matches) => {
-    if (matches.length === 0) {
+  try {
+    const docs = getDocumentationsWithSlugs(gid);
+    if (docs.length === 0) {
       const filePath = path.resolve(
         process.cwd(),
         "docs",
@@ -44,13 +45,20 @@ export default function docsHandler(
         res.status(404).json({ message: `Not Found ${err}` });
       }
     } else {
-      const docs: Documentation[] = matches.map((match) => ({
-        name: path.basename(match, "mdx"),
-        path: match,
-        src: readFileSync(path.join(process.cwd(), match), "utf-8"),
-        date: dayjs(statSync(path.join(process.cwd(), match)).mtime).toString(),
-      }));
       res.status(200).json({ docs: docs });
     }
-  });
+  } catch (err) {
+    res.status(500);
+  }
 }
+
+export const getDocumentationsWithSlugs = (
+  slugs: string[]
+): Documentation[] => {
+  return glob.sync(`docs/${slugs.join("/")}/**/*.mdx`).map((file) => ({
+    name: path.basename(file, "mdx"),
+    path: file,
+    src: readFileSync(path.join(process.cwd(), file), "utf-8"),
+    date: dayjs(statSync(path.join(process.cwd(), file)).mtime).toString(),
+  }));
+};

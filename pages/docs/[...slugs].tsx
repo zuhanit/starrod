@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import axios from "axios";
-import { DocumentationAPIResponse } from "../api/docs";
+import { DocumentationAPIResponse, getDocumentations } from "../api/docs";
 import { Documentation, DocumentationMatter } from "../../types/IDocumentation";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import matter from "gray-matter";
@@ -9,6 +9,7 @@ import Header from "../../containers/Header/Header";
 import MainContent from "../../containers/Content/Content";
 import Head from "next/head";
 import rehypeSlug from "rehype-slug";
+import path from "path";
 
 interface ContentPageProps {
   docs: Documentation;
@@ -38,14 +39,14 @@ const ContentPage = ({ docs, mdxResult, matter }: ContentPageProps) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
+  const docs = getDocumentations();
+  const paths = docs.map((doc) => ({
+    params: {
+      slugs: doc.path.replace(".mdx", "").split("/"),
+    },
+  }));
   return {
-    paths: [
-      {
-        params: {
-          slugs: [""],
-        },
-      },
-    ],
+    paths: paths,
     fallback: "blocking",
   };
 };
