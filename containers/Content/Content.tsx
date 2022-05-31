@@ -1,5 +1,8 @@
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { useContext } from "react";
+import { remark } from "remark";
+import remarkFrontmatter from "remark-frontmatter";
+import { selectAll } from "unist-util-select";
 import Breadcrumbs from "../../components/Navigation/Breadcrumbs";
 import CategoryContext from "../../context/CategoryContext";
 import { useDocsIndex } from "../../hooks/useDocumentation";
@@ -9,7 +12,11 @@ import Article from "../Article/Article";
 import ArticleNavigator from "../Article/ArticleNavigator";
 import Footer from "../Footer/Footer";
 import Sidebar from "../Sidebar/Sidebar";
+import { Heading } from "mdast";
 
+import { toString } from "mdast-util-to-string";
+import ArticleIndexItem from "../../components/Navigation/ArticleIndexItem";
+import ArticleIndex from "../../components/Navigation/ArticleIndex";
 interface MainContentProps {
   docs: Documentation;
   matter: { [key: string]: any };
@@ -64,7 +71,7 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
           display: flex;
           flex-direction: column;
           flex-grow: 1;
-          overflow-y: scroll;
+          overflow-y: auto;
         }
 
         .content-layout {
@@ -73,6 +80,11 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
           padding-right: 30px;
           margin: 0 auto;
           max-width: 1100px;
+          display: flex;
+        }
+
+        .article-index-container {
+          height: auto;
         }
 
         .navigator-container {
@@ -82,20 +94,30 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
         .layout--grow {
           flex-grow: 1;
         }
+
+        .ai-sidebar {
+          width: 210px;
+          margin-left: 40px;
+        }
       `}</style>
       <div className="content">
         <Sidebar />
         <div className="content-container">
           <div className="content-layout">
-            <div className="breadcrumbs-container">
-              <Breadcrumbs>{documentPath.map((path) => path)}</Breadcrumbs>
+            <div>
+              <div className="breadcrumbs-container">
+                <Breadcrumbs>{documentPath.map((path) => path)}</Breadcrumbs>
+              </div>
+              <div className="layout--grow">
+                <Article matter={matter} src={mdxResult} docs={docs} />
+              </div>
             </div>
-            <div className="layout--grow">
-              <Article matter={matter} src={mdxResult} docs={docs} />
-            </div>
+            <aside className="article-index-container">
+              <div className="ai-sidebar">{getArticleIndex(docs)}</div>
+            </aside>
           </div>
           <div className="navigator-container">
-            <ArticleNavigator prev={prevArticle} next={nextArticle} />
+            <div className="ab"></div>
           </div>
           <Footer />
         </div>
@@ -135,6 +157,24 @@ const getDocPath = (index: (string | Index)[], target: string) => {
   });
 
   return categories;
+};
+
+const getArticleIndex = (docs: Documentation) => {
+  const m = selectAll(
+    "heading",
+    remark().use(remarkFrontmatter).parse(docs.src)
+  ).map<React.ReactElement>((node, index) => {
+    const headingNode = node as Heading;
+    return (
+      <ArticleIndexItem
+        depth={headingNode.depth}
+        src={toString(node)}
+        href={encodeURI(`#${toString(node).replace(" ", "-")}`)}
+        key={index}
+      />
+    );
+  });
+  return <ArticleIndex>{m}</ArticleIndex>;
 };
 
 export default MainContent;
