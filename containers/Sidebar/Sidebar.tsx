@@ -6,9 +6,9 @@ import CategoryContext from "../../context/CategoryContext";
 import Search from "../../components/Inputs/Search";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { getSearchResultInCategory, SearchResult } from "../../lib/SearchAPI";
 import { useDocsIndex } from "../../hooks/useDocumentation";
+import { SearchItem } from "../../components/Inputs/SearchItem";
 
 const Sidebar = () => {
   const { category } = useContext(CategoryContext);
@@ -86,42 +86,6 @@ const Sidebar = () => {
         )}
       </nav>
     </aside>
-  );
-};
-
-interface SearchItemProps {
-  item: SearchResult;
-}
-
-const SearchItem = ({ item }: SearchItemProps) => {
-  return (
-    <div className="search-item">
-      <style jsx>{`
-        .search-item {
-          padding: 5px;
-          border: 1px solid transparent;
-        }
-
-        .search-item:hover {
-          border: 1px solid var(--chassis);
-        }
-
-        .title {
-          margin-bottom: 5px;
-        }
-
-        .content {
-          color: var(--text-darker);
-          text-overflow: ellipsis;
-        }
-      `}</style>
-      <Link href={`/${item.path}`}>
-        <a>
-          <div className="title">{item.name}</div>
-          <div className="content">{item.plainSrc}</div>
-        </a>
-      </Link>
-    </div>
   );
 };
 
