@@ -5,35 +5,178 @@ import { AiOutlineLink } from "react-icons/ai";
 import Link from "next/link";
 
 const Headings = {
+  H1: ({ id, ...rest }: HTMLAttributes<HTMLHeadingElement>) => {
+    if (id) {
+      return (
+        <>
+          <a href={`#${decodeURI(id)}`}>
+            <style jsx>{`
+              a {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+              }
+
+              a > :global(svg) {
+                color: transparent;
+              }
+
+              a:hover > :global(svg) {
+                color: var(--text);
+              }
+            `}</style>
+            <h1 id={id} {...rest} />
+            <AiOutlineLink />
+          </a>
+        </>
+      );
+    } else {
+      return <h1 {...rest} />;
+    }
+  },
   H2: ({ id, ...rest }: HTMLAttributes<HTMLHeadingElement>) => {
     if (id) {
       return (
         <>
-          <Link href={`#${encodeURI(id)}`}>
-            <a>
-              <style jsx>{`
-                a {
-                  display: flex;
-                  align-items: center;
-                  gap: 4px;
-                }
+          <a href={`#${decodeURI(id)}`}>
+            <style jsx>{`
+              a {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+              }
 
-                a > :global(svg) {
-                  color: transparent;
-                }
+              a > :global(svg) {
+                color: transparent;
+              }
 
-                a:hover > :global(svg) {
-                  color: var(--text);
-                }
-              `}</style>
-              <h2 {...rest} />
-              <AiOutlineLink />
-            </a>
-          </Link>
+              a:hover > :global(svg) {
+                color: var(--text);
+              }
+            `}</style>
+            <h2 id={id} {...rest} />
+            <AiOutlineLink />
+          </a>
         </>
       );
     } else {
       return <h2 {...rest} />;
+    }
+  },
+  H3: ({ id, ...rest }: HTMLAttributes<HTMLHeadingElement>) => {
+    if (id) {
+      return (
+        <>
+          <a href={`#${decodeURI(id)}`}>
+            <style jsx>{`
+              a {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+              }
+
+              a > :global(svg) {
+                color: transparent;
+              }
+
+              a:hover > :global(svg) {
+                color: var(--text);
+              }
+            `}</style>
+            <h3 id={id} {...rest} />
+            <AiOutlineLink />
+          </a>
+        </>
+      );
+    } else {
+      return <h3 {...rest} />;
+    }
+  },
+  H4: ({ id, ...rest }: HTMLAttributes<HTMLHeadingElement>) => {
+    if (id) {
+      return (
+        <>
+          <a href={`#${decodeURI(id)}`}>
+            <style jsx>{`
+              a {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+              }
+
+              a > :global(svg) {
+                color: transparent;
+              }
+
+              a:hover > :global(svg) {
+                color: var(--text);
+              }
+            `}</style>
+            <h4 id={id} {...rest} />
+            <AiOutlineLink />
+          </a>
+        </>
+      );
+    } else {
+      return <h4 {...rest} />;
+    }
+  },
+  H5: ({ id, ...rest }: HTMLAttributes<HTMLHeadingElement>) => {
+    if (id) {
+      return (
+        <>
+          <a href={`#${decodeURI(id)}`}>
+            <style jsx>{`
+              a {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+              }
+
+              a > :global(svg) {
+                color: transparent;
+              }
+
+              a:hover > :global(svg) {
+                color: var(--text);
+              }
+            `}</style>
+            <h5 id={id} {...rest} />
+            <AiOutlineLink />
+          </a>
+        </>
+      );
+    } else {
+      return <h5 {...rest} />;
+    }
+  },
+  H6: ({ id, ...rest }: HTMLAttributes<HTMLHeadingElement>) => {
+    if (id) {
+      return (
+        <>
+          <a href={`#${decodeURI(id)}`}>
+            <style jsx>{`
+              a {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+              }
+
+              a > :global(svg) {
+                color: transparent;
+              }
+
+              a:hover > :global(svg) {
+                color: var(--text);
+              }
+            `}</style>
+            <h6 id={id} {...rest} />
+            <AiOutlineLink />
+          </a>
+        </>
+      );
+    } else {
+      return <h6 {...rest} />;
     }
   },
 };
@@ -53,6 +196,7 @@ const StyledCode = styled.code`
 
 export const components: MDXComponents = {
   h2: Headings.H2,
+  h3: Headings.H3,
   a: StyledAnchor,
   code: StyledCode,
   p: StyledP,
