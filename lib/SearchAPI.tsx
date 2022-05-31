@@ -11,15 +11,8 @@ export interface SearchResult {
   path: string;
 }
 
-export const getSearchResultInCategory = async (
-  category: Category,
-  target: string
-): Promise<SearchResult[]> => {
-  const { data } = await axios.get<DocumentationAPIResponse>(
-    `/api/docs/${category.id}`
-  );
-  const docs = data.docs as Documentation[];
-  const result = docs
+const filterDocuments = (docs: Documentation[], target: string) => {
+  return docs
     .filter(
       (doc) =>
         doc.src.toLowerCase().includes(target.toLowerCase()) ||
@@ -37,18 +30,37 @@ export const getSearchResultInCategory = async (
         index - 30 < 0 ? 0 : index - 30,
         index + 30 > d.length ? d.length : index + 30,
       ];
-      console.log(index, d.slice(index - 30, index + 30));
       return {
         name: doc.name,
         plainSrc: getHighlightedText(d.slice(lowIndex, highIndex), target),
         path: doc.path.replace(".mdx", ""),
       };
     });
+};
+
+export const getSearchReulst = async (
+  target: string
+): Promise<SearchResult[]> => {
+  const { data } = await axios.get<DocumentationAPIResponse>(`/api/docs`);
+  const docs = data.docs as Documentation[];
+  const result = filterDocuments(docs, target);
+  return Promise.all(result);
+};
+
+export const getSearchResultInCategory = async (
+  category: Category,
+  target: string
+): Promise<SearchResult[]> => {
+  const { data } = await axios.get<DocumentationAPIResponse>(
+    `/api/docs/${category.id}`
+  );
+  const docs = data.docs as Documentation[];
+  const result = filterDocuments(docs, target);
   return Promise.all(result);
 };
 
 export const getHighlightedText = (text: string, highlight: string) => {
-  const parts = text.split(new RegExp(`(${highlight})`, "gi"));
+  const parts = text.split(new RegExp(`(${highlight})`, "g"));
   return (
     <span>
       {parts.map((part, index) => (
