@@ -195,8 +195,12 @@ const StyledCode = styled.code`
 `;
 
 export const components: MDXComponents = {
+  h1: Headings.H1,
   h2: Headings.H2,
   h3: Headings.H3,
+  h4: Headings.H4,
+  h5: Headings.H5,
+  h6: Headings.H6,
   a: StyledAnchor,
   code: StyledCode,
   p: StyledP,
