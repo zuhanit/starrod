@@ -13,6 +13,7 @@ interface ArticleProps {
 
 const Article = ({ docs, src, matter }: ArticleProps) => {
   const contributors = ["zuhanit"];
+
   return (
     <article className="article">
       <style jsx>{`
@@ -20,7 +21,7 @@ const Article = ({ docs, src, matter }: ArticleProps) => {
           display: flex;
           flex-direction: column;
           gap: 2em;
-          max-width: 65%;
+          width: 100%;
         }
 
         .title > h1 {
