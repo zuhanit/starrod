@@ -117,7 +117,7 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
             </aside>
           </div>
           <div className="navigator-container">
-            <div className="ab"></div>
+            <ArticleNavigator prev={prevArticle} next={nextArticle} />
           </div>
           <Footer />
         </div>
