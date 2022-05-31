@@ -15,6 +15,9 @@ const Search = (props: SearchProps) => {
       props.onChange(event);
     }
   };
+  const onClickReset = () => {
+    inputRef.current!.value = "";
+  };
   return (
     <div className="search-wrapper">
       <style jsx>{`
@@ -29,6 +32,8 @@ const Search = (props: SearchProps) => {
           border-radius: 5px;
           border: 1px solid var(--chassis);
           padding-left: calc(15px + 7px + 5px);
+          background: var(--background);
+          color: var(--text);
         }
 
         :global(.search-icon) {
@@ -72,6 +77,7 @@ const Search = (props: SearchProps) => {
         className={`search-delete-icon ${valueExist ? "visible" : "hidden"}`}
         size="15px"
         fill="var(--chassis)"
+        onClick={onClickReset}
       />
     </div>
   );
