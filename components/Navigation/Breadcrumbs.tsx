@@ -1,5 +1,3 @@
-import { MdArrowForwardIos } from "react-icons/md";
-import { BsSlashLg } from "react-icons/bs";
 import { BiChevronRight } from "react-icons/bi";
 
 interface BreadcrumbsProps {

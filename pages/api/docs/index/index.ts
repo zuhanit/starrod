@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import yaml from "js-yaml";
 import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
-import { Category, CategoryGroup } from "../../../../types/Category";
+import { CategoryGroup } from "../../../../types/Category";
 
 export interface DocumentationIndexAPIResponse {
   list: IndexCategory;

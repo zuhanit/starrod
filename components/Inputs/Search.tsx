@@ -1,6 +1,6 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { HTMLAttributes, useRef } from "react";
-import { AiOutlineClose, AiOutlinePlus, AiOutlineSearch } from "react-icons/ai";
+import { ChangeEvent, useState } from "react";
+import { useRef } from "react";
+import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 
 interface SearchProps extends Omit<React.HTMLProps<HTMLInputElement>, "type"> {}
 

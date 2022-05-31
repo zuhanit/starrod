@@ -1,7 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import axios from "axios";
-import { DocumentationAPIResponse, getDocumentations } from "../api/docs";
-import { Documentation, DocumentationMatter } from "../../types/IDocumentation";
+import { getDocumentations } from "../api/docs";
+import { Documentation } from "../../types/IDocumentation";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import matter from "gray-matter";
 import { serialize } from "next-mdx-remote/serialize";
@@ -9,7 +8,6 @@ import Header from "../../containers/Header/Header";
 import MainContent from "../../containers/Content/Content";
 import Head from "next/head";
 import rehypeSlug from "rehype-slug";
-import path from "path";
 import { getDocumentationsWithSlugs } from "../api/docs/[...gid]";
 
 interface ContentPageProps {

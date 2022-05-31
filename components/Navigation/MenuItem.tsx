@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { ClickableType } from "../Types/Clickable";
 
 export interface MenuItemProps {
   title: string;

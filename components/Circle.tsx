@@ -1,4 +1,3 @@
-import { PropsWithChildren } from "react";
 import styled from "styled-components";
 
 const CircleStyle = styled.div<CircleProps>`

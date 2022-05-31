@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { MDXComponents } from "mdx/types";
 import React, { HTMLAttributes } from "react";
 import { AiOutlineLink } from "react-icons/ai";
-import Link from "next/link";
 
 const Headings = {
   H1: ({ id, ...rest }: HTMLAttributes<HTMLHeadingElement>) => {
