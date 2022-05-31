@@ -3,11 +3,13 @@ import Menu from "../../components/Navigation/Menu";
 import MenuItem, { MenuItemProps } from "../../components/Navigation/MenuItem";
 import Logo from "../Logo/Logo";
 import { AiFillCaretDown } from "react-icons/ai";
-import { useContext, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import CategoryContext from "../../context/CategoryContext";
 import { Categories, CategoryGroup } from "../../types/Category";
 import Search from "../../components/Inputs/Search";
 import ThemeButton from "../ThemeButton";
+import { getSearchReulst, SearchResult } from "../../lib/SearchAPI";
+import { SearchItem } from "../../components/Inputs/SearchItem";
 
 const MenuComponent = (category: string) => (
   <div className="menu-component">
@@ -45,6 +47,15 @@ const Header = () => {
         />
       );
     });
+  const [searchDocs, setSearchdocs] = useState<SearchResult[]>([]);
+  const onChangeSearch = async (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value.length > 0) {
+      const result = await getSearchReulst(event.target.value);
+      setSearchdocs(result);
+    } else {
+      setSearchdocs([]);
+    }
+  };
   return (
     <header>
       <style jsx>{`
@@ -55,7 +66,7 @@ const Header = () => {
         .header-container {
           display: flex;
           align-items: center;
-          height: 50px;
+          height: 65px;
           padding: 0 20px;
           gap: 6px;
         }
@@ -77,6 +88,23 @@ const Header = () => {
           display: flex;
           align-items: center;
         }
+
+        .header-search-container {
+          width: 410px;
+          position: relative;
+        }
+
+        .search-result {
+          width: 100%;
+          position: absolute;
+          z-index: 1;
+          top: 40px;
+          background-color: var(--background);
+          border: 1px solid var(--chassis);
+          max-height: 200px;
+          overflow: auto;
+          color: var(--text-on-dark);
+        }
       `}</style>
       <div className="header-container">
         <div className="header-navigation-logo">
@@ -87,7 +115,16 @@ const Header = () => {
         </div>
         <div className="header-navigation-main">
           <ThemeButton />
-          <Search />
+          <div className="header-search-container">
+            <Search onChange={onChangeSearch} />
+            {searchDocs.length > 0 && (
+              <div className="search-result">
+                {searchDocs.map((doc, index) => (
+                  <SearchItem item={doc} key={index}></SearchItem>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>
