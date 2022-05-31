@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { BsSun, BsMoon } from "react-icons/bs";
 import ThemeContext from "../context/ThemeContext";
 
@@ -12,7 +12,6 @@ const ThemeButton = () => {
 
   useEffect(() => {
     document.body.dataset.theme = theme;
-    console.log(document.body.dataset.theme);
   }, [theme]);
 
   return (
