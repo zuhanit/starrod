@@ -10,6 +10,7 @@ import MainContent from "../../containers/Content/Content";
 import Head from "next/head";
 import rehypeSlug from "rehype-slug";
 import path from "path";
+import { getDocumentationsWithSlugs } from "../api/docs/[...gid]";
 
 interface ContentPageProps {
   docs: Documentation;
@@ -42,7 +43,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
   const docs = getDocumentations();
   const paths = docs.map((doc) => ({
     params: {
-      slugs: doc.path.replace(".mdx", "").split("/"),
+      slugs: doc.path.replace("docs/", "").replace(".mdx", "").split("/"),
     },
   }));
   return {
@@ -53,12 +54,10 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
 export const getStaticProps: GetStaticProps<ContentPageProps> = async (ctx) => {
   const { slugs } = ctx.params as { slugs: string[] };
-  try {
-    const { data } = await axios.get<DocumentationAPIResponse>(
-      `https://starrod.vercel.app/api/docs/${slugs.join("/")}`
-    );
-    if (Array.isArray(data.docs)) return { notFound: true };
-    const { content, data: matterData } = matter(data.docs!.src);
+  const data = getDocumentationsWithSlugs(slugs);
+
+  if (data && !Array.isArray(data)) {
+    const { content, data: matterData } = matter(data.src);
     const mdxResult = await serialize(content, {
       mdxOptions: {
         rehypePlugins: [rehypeSlug],
@@ -67,16 +66,14 @@ export const getStaticProps: GetStaticProps<ContentPageProps> = async (ctx) => {
     });
     return {
       props: {
-        docs: data["docs"] as Documentation,
+        docs: data,
         mdxResult: mdxResult,
         matter: matterData,
       },
     };
-  } catch {
-    return {
-      notFound: true,
-    };
   }
+
+  return { notFound: true };
 };
 
 export default ContentPage;
