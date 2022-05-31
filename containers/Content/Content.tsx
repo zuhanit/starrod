@@ -79,7 +79,8 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
           padding-left: 30px;
           padding-right: 30px;
           margin: 0 auto;
-          max-width: 1100px;
+          width: 1100px;
+          flex-grow: 1;
           display: flex;
         }
 
@@ -104,7 +105,7 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
         <Sidebar />
         <div className="content-container">
           <div className="content-layout">
-            <div>
+            <div className="layout--grow">
               <div className="breadcrumbs-container">
                 <Breadcrumbs>{documentPath.map((path) => path)}</Breadcrumbs>
               </div>
