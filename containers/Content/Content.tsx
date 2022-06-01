@@ -67,11 +67,11 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
 
         .content-layout {
           padding-top: 48px;
-          padding-left: 30px;
-          padding-right: 30px;
+          padding-left: 16px;
+          padding-right: 16px;
           margin: 0 auto;
-          width: calc(1025 - 60px);
-          flex-grow: 1;
+          max-width: calc(1025px - 16px);
+          width: 100%;
           display: flex;
         }
 
@@ -87,6 +87,10 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
           flex-grow: 1;
         }
 
+        .layout--fullwidth {
+          width: 100%;
+        }
+
         .ai-sidebar {
           width: 210px;
           margin-left: 40px;
@@ -96,7 +100,7 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
         {!isMobile && <Sidebar />}
         <div className="content-container">
           <div className="content-layout">
-            <div className="layout--grow">
+            <div className="layout--grow layout--fullwidth">
               <div className="breadcrumbs-container">
                 <Breadcrumbs>{documentPath.map((path) => path)}</Breadcrumbs>
               </div>
