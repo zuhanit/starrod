@@ -162,35 +162,38 @@ const HeaderNavigator = forwardRef<HTMLDivElement, HeaderNavigatorProps>(
     };
 
     return (
-      <div className="header-search-container" ref={ref} onClick={onClick}>
-        <style jsx>{`
-          .header-search-container {
-            position: relative;
-            max-width: 410px;
-            flex-grow: 1;
-          }
+      <>
+        <ThemeButton />{" "}
+        <div className="header-search-container" ref={ref} onClick={onClick}>
+          <style jsx>{`
+            .header-search-container {
+              position: relative;
+              max-width: 410px;
+              flex-grow: 1;
+            }
 
-          .search-result {
-            width: 100%;
-            position: absolute;
-            z-index: 1;
-            top: 40px;
-            background-color: var(--background);
-            border: 1px solid var(--chassis);
-            max-height: 200px;
-            overflow: auto;
-            color: var(--text-on-dark);
-          }
-        `}</style>
-        <Search onChange={onChangeSearch} />
-        {searchDocs.length > 0 && (
-          <div className="search-result">
-            {searchDocs.map((doc, index) => (
-              <SearchItem item={doc} key={index}></SearchItem>
-            ))}
-          </div>
-        )}
-      </div>
+            .search-result {
+              width: 100%;
+              position: absolute;
+              z-index: 1;
+              top: 40px;
+              background-color: var(--background);
+              border: 1px solid var(--chassis);
+              max-height: 200px;
+              overflow: auto;
+              color: var(--text-on-dark);
+            }
+          `}</style>
+          <Search onChange={onChangeSearch} />
+          {searchDocs.length > 0 && (
+            <div className="search-result">
+              {searchDocs.map((doc, index) => (
+                <SearchItem item={doc} key={index}></SearchItem>
+              ))}
+            </div>
+          )}
+        </div>
+      </>
     );
   }
 );
