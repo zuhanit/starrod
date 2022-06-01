@@ -48,7 +48,7 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
         .overflow-guard {
           position: relative;
           overflow: hidden;
-          height: calc(100% - 50px);
+          height: calc(100% - 80px);
         }
         .content {
           display: flex;
