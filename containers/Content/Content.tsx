@@ -6,17 +6,21 @@ import { selectAll } from "unist-util-select";
 import Breadcrumbs from "../../components/Navigation/Breadcrumbs";
 import CategoryContext from "../../context/CategoryContext";
 import { useDocsIndex } from "../../hooks/useDocumentation";
-import { Index } from "../../pages/api/docs/index/index";
+import {
+  DocumentationIndexAPIResponse,
+  Index,
+} from "../../pages/api/docs/index/index";
 import { Documentation } from "../../types/IDocumentation";
 import Article from "../Article/Article";
 import ArticleNavigator from "../Article/ArticleNavigator";
 import Footer from "../Footer/Footer";
 import Sidebar from "../Sidebar/Sidebar";
 import { Heading } from "mdast";
-
 import { toString } from "mdast-util-to-string";
 import ArticleIndexItem from "../../components/Navigation/ArticleIndexItem";
 import ArticleIndex from "../../components/Navigation/ArticleIndex";
+import { useMediaQuery } from "react-responsive";
+import { Category } from "../../types/Category";
 interface MainContentProps {
   docs: Documentation;
   matter: { [key: string]: any };
@@ -25,32 +29,19 @@ interface MainContentProps {
 
 const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
   const { category } = useContext(CategoryContext);
+  const isMobile = useMediaQuery({
+    query: "(max-width: 1025px)",
+  });
   const data = useDocsIndex();
   if (!data) {
     return <div></div>;
   }
-  const currentDocumentIndex = matter["sort"];
-  const categoryItems = flattenCategoryItems(data.list[category.id]);
-  const documentPath = [
-    category.name,
-    ...getDocPath(data.list[category.id], docs.name),
-  ];
-  const [prev, next] = [
-    categoryItems[currentDocumentIndex - 1],
-    categoryItems[currentDocumentIndex + 1],
-  ];
-  const prevArticle = prev
-    ? {
-        label: prev,
-        href: `${category.id}/${prev}`,
-      }
-    : undefined;
-  const nextArticle = next
-    ? {
-        label: next,
-        href: `${category.id}/${next}`,
-      }
-    : undefined;
+  const { documentPath, prevArticle, nextArticle } = getArticleNavigator(
+    matter,
+    data,
+    category,
+    docs
+  );
   return (
     <div className="overflow-guard">
       <style jsx>{`
@@ -76,11 +67,11 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
 
         .content-layout {
           padding-top: 48px;
-          padding-left: 30px;
-          padding-right: 30px;
+          padding-left: 16px;
+          padding-right: 16px;
           margin: 0 auto;
-          width: 1100px;
-          flex-grow: 1;
+          max-width: calc(1025px - 16px);
+          width: 100%;
           display: flex;
         }
 
@@ -96,16 +87,20 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
           flex-grow: 1;
         }
 
+        .layout--fullwidth {
+          width: 100%;
+        }
+
         .ai-sidebar {
           width: 210px;
           margin-left: 40px;
         }
       `}</style>
       <div className="content">
-        <Sidebar />
+        {!isMobile && <Sidebar />}
         <div className="content-container">
           <div className="content-layout">
-            <div className="layout--grow">
+            <div className="layout--grow layout--fullwidth">
               <div className="breadcrumbs-container">
                 <Breadcrumbs>{documentPath.map((path) => path)}</Breadcrumbs>
               </div>
@@ -113,10 +108,13 @@ const MainContent = ({ docs, matter, mdxResult }: MainContentProps) => {
                 <Article matter={matter} src={mdxResult} docs={docs} />
               </div>
             </div>
-            <aside className="article-index-container">
-              <div className="ai-sidebar">{getArticleIndex(docs)}</div>
-            </aside>
+            {!isMobile && (
+              <aside className="article-index-container">
+                <div className="ai-sidebar">{getArticleIndex(docs)}</div>
+              </aside>
+            )}
           </div>
+
           <div className="navigator-container">
             <ArticleNavigator prev={prevArticle} next={nextArticle} />
           </div>
@@ -177,5 +175,36 @@ const getArticleIndex = (docs: Documentation) => {
   });
   return <ArticleIndex>{m}</ArticleIndex>;
 };
+
+function getArticleNavigator(
+  matter: { [key: string]: any },
+  data: DocumentationIndexAPIResponse,
+  category: Category,
+  docs: Documentation
+) {
+  const currentDocumentIndex = matter["sort"];
+  const categoryItems = flattenCategoryItems(data.list[category.id]);
+  const documentPath = [
+    category.name,
+    ...getDocPath(data.list[category.id], docs.name),
+  ];
+  const [prev, next] = [
+    categoryItems[currentDocumentIndex - 1],
+    categoryItems[currentDocumentIndex + 1],
+  ];
+  const prevArticle = prev
+    ? {
+        label: prev,
+        href: `${category.id}/${prev}`,
+      }
+    : undefined;
+  const nextArticle = next
+    ? {
+        label: next,
+        href: `${category.id}/${next}`,
+      }
+    : undefined;
+  return { documentPath, prevArticle, nextArticle };
+}
 
 export default MainContent;
